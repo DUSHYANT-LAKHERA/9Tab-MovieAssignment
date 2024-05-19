@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { PostSignUp } from '../../APIStore/Features/auth/authActions';
+import { useDispatch } from 'react-redux';
 
 const SignUpPage = () => {
-    const [emailSignUp, setEmailSignUp] = useState('');
-    const [passwordSignUp, setPasswordSignUp] = useState('');
+    const [emailSignUp, setEmailSignUp] = useState('eve.holt@reqres.in');
+    const [passwordSignUp, setPasswordSignUp] = useState('pistol');
 
     const nav = useNavigate();
-
+    const dispatch = useDispatch()
     const handleSignUp = async () => {
-
+        dispatch(PostSignUp({ email: emailSignUp, password: passwordSignUp }))
     };
+
     console.log(emailSignUp, "dkjajn")
     const handleBackToLogin = () => {
         nav("/login");

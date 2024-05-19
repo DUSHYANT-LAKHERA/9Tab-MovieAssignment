@@ -1,9 +1,43 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchMovieList, fetchNowPlaying, fetchPopular, fetchTopRated, fetchUpcoming, searchMovies } from '../../APIStore/Features/auth/authActions';
+
 
 const Header = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [selectedSortOption, setSelectedSortOption] = useState('AllMovies');
     const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
     const sortMenuRef = useRef(null);
+    const dispatch = useDispatch();
+    const [query, setQuery] = useState('');
+
+    const handleSortOption = (option) => {
+        switch (option) {
+            case 'AllMovies':
+                dispatch(fetchMovieList({ page: "1" }));
+
+                break;
+            case 'nowPlaying':
+                dispatch(fetchNowPlaying({ page: "1" }));
+                break;
+
+            case 'popular':
+                console.log("helloooooo")
+                dispatch(fetchPopular({ page: "1" }));
+                break;
+            case 'topRated':
+                console.log("helloooooo")
+                dispatch(fetchTopRated({ page: "1" }));
+                break;
+            case 'upcoming':
+                console.log("helloooooo")
+                dispatch(fetchUpcoming({ page: "1" }));
+                break;
+            default:
+                break;
+        }
+        setIsSortMenuOpen(false);
+    };
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -11,6 +45,11 @@ const Header = () => {
 
     const toggleSortMenu = () => {
         setIsSortMenuOpen(!isSortMenuOpen);
+    };
+
+    const handleSelectChange = (e) => {
+        setSelectedSortOption(e.target.value);
+        handleSortOption(e.target.value);
     };
 
     useEffect(() => {
@@ -27,39 +66,49 @@ const Header = () => {
         };
     }, []);
 
+
+
+    const handleSearch = () => {
+        dispatch(searchMovies(query));
+    };
+
     return (
         <header className="bg-gray-800 text-white">
             <div className="container mx-auto flex justify-between items-center p-4">
-                {/* Logo/Brand */}
                 <div className="text-xl font-bold">MyApp</div>
 
-                {/* Navigation Links */}
                 <nav className="hidden md:flex space-x-4">
                     <a href="/" className="hover:text-gray-400">Home</a>
                     <a href="/about" className="hover:text-gray-400">About</a>
                     <button className="hover:text-gray-400">Logout</button>
                 </nav>
 
-                {/* Search and Sort */}
+
                 <div className="hidden md:flex items-center space-x-4">
                     <input
                         type="text"
                         placeholder="Search..."
+                        value={query} onChange={(e) => setQuery(e.target.value)}
                         className="px-2 py-1 rounded text-black"
                     />
+                    <button onClick={handleSearch}>Search</button>
+
                     <div className="relative" ref={sortMenuRef}>
-                        <button onClick={toggleSortMenu} className="hover:text-gray-400">Sort</button>
-                        {isSortMenuOpen && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded shadow-lg">
-                                <button className="block px-4 py-2 hover:bg-gray-200">1</button>
-                                <button className="block px-4 py-2 hover:bg-gray-200">2</button>
-                                <button className="block px-4 py-2 hover:bg-gray-200">3</button>
-                            </div>
-                        )}
+                        <select
+                            value={selectedSortOption}
+                            onChange={handleSelectChange}
+                            className="px-4 py-2 text-sm bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                            style={{ color: '#4A5568', backgroundColor: '#F7FAFC' }}
+                        >
+                            <option value="AllMovies">All Movies</option>
+                            <option value="nowPlaying">Now Playing</option>
+                            <option value="popular">Popular</option>
+                            <option value="topRated">Top Rated</option>
+                            <option value="upcoming">Upcoming</option>
+                        </select>
                     </div>
                 </div>
 
-                {/* Mobile Menu Button */}
                 <div className="md:hidden flex items-center">
                     <button onClick={toggleMobileMenu} className="mobile-menu-button">
                         <svg
@@ -80,7 +129,6 @@ const Header = () => {
                 </div>
             </div>
 
-            {/* Mobile Menu */}
             <div className={`md:hidden ${isMobileMenuOpen ? 'block' : 'hidden'} mobile-menu`}>
                 <a href="/" className="block px-4 py-2 text-sm hover:bg-gray-700">Home</a>
                 <a href="/about" className="block px-4 py-2 text-sm hover:bg-gray-700">About</a>
@@ -88,17 +136,28 @@ const Header = () => {
                 <input
                     type="text"
                     placeholder="Search..."
+                    value={query} onChange={(e) => setQuery(e.target.value)}
+
                     className="block w-full px-4 py-2 text-black"
                 />
+                <button onClick={handleSearch}>Search</button>
+
                 <div className="relative" ref={sortMenuRef}>
-                    <button onClick={toggleSortMenu} className="block w-full px-4 py-2 text-sm hover:bg-gray-700">Sort</button>
-                    {isSortMenuOpen && (
-                        <div className="absolute left-0 mt-2 w-full bg-white text-black rounded shadow-lg">
-                            <button className="block px-4 py-2 hover:bg-gray-200">1</button>
-                            <button className="block px-4 py-2 hover:bg-gray-200">2</button>
-                            <button className="block px-4 py-2 hover:bg-gray-200">3</button>
-                        </div>
-                    )}
+                    <select
+                        value={selectedSortOption}
+                        onChange={(e) => {
+                            setSelectedSortOption(e.target.value);
+                            handleSortOption(e.target.value);
+                        }}
+                        className="block w-full px-4 py-2 text-sm hover:bg-gray-700"
+                        style={{ color: '#4A5568', backgroundColor: '#F7FAFC' }}
+                    >
+                        <option value="AllMovies">All Movies</option>
+                        <option value="nowPlaying">Now Playing</option>
+                        <option value="popular">Popular</option>
+                        <option value="topRated">Top Rated</option>
+                        <option value="upcoming">Upcoming</option>
+                    </select>
                 </div>
             </div>
         </header>

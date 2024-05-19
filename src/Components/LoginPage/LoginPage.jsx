@@ -1,19 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import { signIn } from './services/api';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { PostLogin } from '../../APIStore/Features/auth/authActions';
+import { useDispatch, useSelector } from 'react-redux';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('eve.holt@reqres.in');
     const [password, setPassword] = useState('cityslicka');
+    const { postLoginData } = useSelector((state) => state.auth);
 
+
+    const dispatch = useDispatch()
     const nav = useNavigate();
 
-    const handleLogin = async (e) => {
+    const handleLogin = (e) => {
         e.preventDefault();
-        nav("/home");
-
+        dispatch(PostLogin({ email: email, password: password }))
     };
+    useEffect(() => {
+        if (postLoginData?.token) {
+            localStorage.setItem("Token", "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4ZTE4ZDgzOWZhNmZiYzk4NjllZmE3ZDZhZGZhMTAyZSIsInN1YiI6IjY2NDhiMWY4ZmQ0MWQ1M2NhZmYyNDA3YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WadM8kTBoovU9Ib_xngW7QR36tq-q4qB0q1Xorn2DGQ")
+            nav("/home")
+        }
+    }, [postLoginData])
+
 
     const handleSignUp = (e) => {
         nav("/signin");
