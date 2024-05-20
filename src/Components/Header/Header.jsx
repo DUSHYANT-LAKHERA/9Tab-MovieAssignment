@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchMovieList, fetchNowPlaying, fetchPopular, fetchTopRated, fetchUpcoming, searchMovies } from '../../APIStore/Features/auth/authActions';
+import { useNavigate } from 'react-router-dom';
 
 
 const Header = () => {
@@ -10,6 +11,7 @@ const Header = () => {
     const sortMenuRef = useRef(null);
     const dispatch = useDispatch();
     const [query, setQuery] = useState('');
+    const navigate = useNavigate();
 
     const handleSortOption = (option) => {
         switch (option) {
@@ -71,11 +73,14 @@ const Header = () => {
     const handleSearch = () => {
         dispatch(searchMovies(query));
     };
+    const handleHome = () => {
+        navigate("home")
+    };
 
     return (
         <header className="bg-gray-800 text-white">
             <div className="container mx-auto flex justify-between items-center p-4">
-                <div className="text-xl font-bold">MyApp</div>
+                <div className="text-xl font-bold" onClick={handleHome}>MyApp</div>
 
                 <nav className="hidden md:flex space-x-4">
                     <a href="/" className="hover:text-gray-400">Home</a>
