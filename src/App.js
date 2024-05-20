@@ -12,7 +12,7 @@ function App() {
     const interval = setInterval(() => {
       const userLoginToken = localStorage.getItem("Token")
       if (userLoginToken) {
-        nav("/Home")
+        // nav("/home")
       } else {
         nav("/")
       }

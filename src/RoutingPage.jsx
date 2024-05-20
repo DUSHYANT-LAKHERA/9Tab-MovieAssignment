@@ -14,8 +14,8 @@ const RoutingPage = () => {
                 <Route path="/" element={<Layout />}>
                     <Route path="/" element={<Navigate to="/login" />} />
                     <Route path="home" element={<HomePage />} />
+                    <Route path="movie/:id" element={<MovieDetailsPage />} />
                     <Route path="login" element={<LoginPage />} />
-                    <Route path="/movie/:id" element={<MovieDetailsPage />} />
                     <Route path="signin" element={<SignUpPage />} />
                 </Route>
             </Routes>

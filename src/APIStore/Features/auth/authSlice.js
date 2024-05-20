@@ -20,7 +20,10 @@ const movieSlice = createSlice({
         error: null,
 
         searchResults: [],
-        movieDetails: []
+
+        movieDetailsData: [],
+        movieDetailsDatastatus: 'idle',
+        movieDetailsDataerror: null,
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -126,11 +129,11 @@ const movieSlice = createSlice({
             })
             .addCase(fetchMovieDetails.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.movieDetails = action.payload;
+                state.movieDetailsData = action.payload;
             })
             .addCase(fetchMovieDetails.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.error.message;
+                state.error = action.error;
             });
     },
 });

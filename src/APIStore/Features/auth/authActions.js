@@ -107,10 +107,14 @@ export const searchMovies = createAsyncThunk('movies/searchMovies', async (searc
     }
 });
 export const fetchMovieDetails = createAsyncThunk('movies/fetchMovieDetails', async (movieId) => {
-    const response = await axios.get(`${baseURL}/movie/${movieId}`, {
-        params: {
-            api_key: apiKey,
-        },
-    });
-    return response.data;
+    try {
+        const response = await axios.get(`${baseURL}/movie/${movieId}`, {
+            params: {
+                api_key: apiKey,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
 });
